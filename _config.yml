@@ -1,3 +1,4 @@
 name: humble as a mumble in the jungle
 pygments: true
 permalink: /:year/:month/:title.html
+markdown: kramdown
