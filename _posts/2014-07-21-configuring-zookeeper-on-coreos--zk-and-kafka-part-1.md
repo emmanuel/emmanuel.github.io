@@ -104,3 +104,6 @@ This is what I've put together so far; it adds up to a Zookeeper ensemble (of
 arbitrary size) running on top of a CoreOS cluster. Well, except for the part
 where I glossed over how the DNS names work. And then, the next step is to make
 it visible to other containers. Find out more about both in the next article.
+
+All the code for this article [is available on
+Github](https://github.com/emmanuel/docker-zookeeper).
