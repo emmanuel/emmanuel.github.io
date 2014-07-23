@@ -76,4 +76,7 @@ datacenter-scale enterprise IT (despite the fact that it is widely used in
 enterprise IT by way of Active Directory). Anyhoo, we've all got our quirks,
 right?
 
-Next up: Zookeeper & Kafka on CoreOS
+Next up: Zookeeper & Kafka on CoreOS.
+
+EDIT: [Zookeeper and Kafka notes are now
+published]({% post_url 2014-07-21-configuring-zookeeper-on-coreos--zk-and-kafka-part-1 %}).
