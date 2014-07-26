@@ -44,10 +44,10 @@ speaks to the local etcd instance in order to answer DNS queries. This is nice
 and simple because all of the services on this cluster will be running in
 containers, [which can access the host via a known IP:
 172.17.42.1](http://coreos.com/blog/docker-dynamic-ambassador-powered-by-etcd/#toc_4). This allows an admin to [configure the docker daemons on all CoreOS
-hosts in a cluster to use this IP as the default DNS
-server](https://github.com/emmanuel/coreos-skydns-cloudformation/blob/22b5a7ee480a9dae3d33727c1b20bd6e7ce30510/cloudformation-template.json#L144)
+hosts in a cluster](https://github.com/emmanuel/coreos-skydns-cloudformation/blob/22b5a7ee480a9dae3d33727c1b20bd6e7ce30510/cloudformation-template.json#L144) to [use the local SkyDNS daemon as their default DNS
+server](https://github.com/emmanuel/coreos-skydns-cloudformation/blob/22b5a7ee480a9dae3d33727c1b20bd6e7ce30510/cloudformation-template.json#L151)
 for all containers running on the cluster. In other words, all containers can
-easily access the service registry via DNS: universal access, cluster-wide.
+easily access the service registry, via DNS. Universal access, cluster-wide.
 
 I'm now testing using [DNS-SD](http://www.dns-sd.org) as a way to structure
 the DNS SRV records. So far it seems like a good approach. Combined with
@@ -58,22 +58,26 @@ records](http://mnx.io/blog/a-proper-server-naming-scheme/) helps a lot here
 (specifically the suggestions under "Standardized CNAME Structure").
 Along the way, I realized that it's helpful to be able to easily query the host
 IP from within a container, so I [configured SkyDNS to make it
-easy](https://github.com/emmanuel/coreos-skydns-cloudformation/blob/22b5a7ee480a9dae3d33727c1b20bd6e7ce30510/cloudformation-template.json#L186).
+easy](https://github.com/emmanuel/coreos-skydns-cloudformation/blob/22b5a7ee480a9dae3d33727c1b20bd6e7ce30510/cloudformation-template.json#L186-L187).
 From within the container, just query DNS for `local.dns.cluster.local` (or
-whatever you have your SkyDNS domain set to).
+whatever you have your SkyDNS search domain set to).
 
 I'm a big fan of not needlessly re-inventing the wheel, so this approach to
 service discover appeals on that dimension. To be more specific, it is very
 valuable that service discovery via DNS is universally accessible and extremely
-natural/idiomatic. Happily, service registrations are just as pleasant:
-[I've been using `etcdctl` calls to set the data for SkyDNS](https://github.com/emmanuel/coreos-skydns-cloudformation/blob/22b5a7ee480a9dae3d33727c1b20bd6e7ce30510/cloudformation-template.json#L186).
-It is only slightly more verbose to accomplish the same thing with curl or any
+natural/idiomatic. Happily, service registrations are just as pleasant: [I've
+been using `etcdctl` calls to set the data for
+SkyDNS](https://github.com/emmanuel/coreos-skydns-cloudformation/blob/22b5a7ee480a9dae3d33727c1b20bd6e7ce30510/cloudformation-template.json#L186).
+Aside from the `etcdctl` client, etcd's primary interface is via HTTP, so it is
+only slightly more verbose to accomplish the same thing with `curl`, or any
 other HTTP client.
 
 It also doesn't hurt that I find it ironic, or possibly cute, that DNS-SD is
 often associated with consumer technology (e.g., Apple Bonjour) rather than
 datacenter-scale enterprise IT (despite the fact that it is widely used in
-enterprise IT by way of Active Directory). Anyhoo, we've all got our quirks,
+enterprise IT [by way of Active
+Directory](http://technet.microsoft.com/en-us/library/cc961719.aspx); [and also
+XMPP](http://wiki.xmpp.org/web/SRV_Records)). Anyhoo, we've all got our quirks,
 right?
 
 Next up: Zookeeper & Kafka on CoreOS.
